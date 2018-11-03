@@ -9,7 +9,7 @@ import config
 
 
 BOT_NAME = "dog_pic_bot"
-SUBREDDITS = 'dogs+rarepuppers'
+SUBREDDITS = 'dogs'
 REPLY_TEMPLATE = '''Woof! Did I hear someone say {0}? [Here's one now!]({1})
 
 
@@ -47,13 +47,11 @@ def reply(submission, breed):
 
 def processSubmission(submission):
     title = submission.title.lower()
-    shouldSkipSubmission = shouldSkip(submission)
 
-    if not shouldSkipSubmission:
-        for breed in breeds:
-            if breed in title:
-                reply(submission, breed)
-                # quit()
+    for breed in breeds:
+        if breed in title and not shouldSkip(submission):
+            reply(submission, breed)
+            # quit()
 
 def shouldSkip(submission):
     title = submission.title.lower()
