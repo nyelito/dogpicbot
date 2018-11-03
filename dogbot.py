@@ -9,7 +9,9 @@ import config
 
 
 BOT_NAME = "dog_pic_bot"
+SUBREDDITS = 'dogs+rarepuppers'
 REPLY_TEMPLATE = '''Woof! Did I hear someone say {0}? [Here's one now!]({1})
+
 
 *Bow wow wow, I'm a bot, if you don't enjoy this post PM me and I'll remove it*'''
 
@@ -68,14 +70,17 @@ def shouldSkip(submission):
 
     #  if we have already posted on this submission, don't post again
     for comment in submission.comments:
-        if BOT_NAME in comment.author.name:
-            print('Skipping because of comment {0}'.format(comment))
-            return True
+        try:
+            if BOT_NAME in comment.author.name:
+                print('Skipping because of comment {0}'.format(comment))
+                return True
+        except AttributeError:
+            print('Comment {0} had no author'.format(comment))
 
     return False
 
 
 
-subreddit = reddit.subreddit('dogs')
+subreddit = reddit.subreddit(SUBREDDITS)
 for submission in subreddit.stream.submissions():
     processSubmission(submission)
